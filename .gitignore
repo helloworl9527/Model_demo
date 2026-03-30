@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# Environments
+.venv/
+venv/
+env/
+
+# Secrets
+.env
+
+# Runtime data (keep structure, ignore generated artifacts)
+data/records/**
+!data/records/.gitkeep
+data/evidence/evidence.db
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/

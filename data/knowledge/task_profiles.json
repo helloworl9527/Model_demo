@@ -1,0 +1,18 @@
+[
+  {
+    "task_type": "finance_review",
+    "profile": "财务收支审查，关注报销、凭证、总账、往来款、异常波动、资金合规"
+  },
+  {
+    "task_type": "contract_tender_check",
+    "profile": "合同招标核查，关注招采流程、公告、评标、合同条款、履约、供应商"
+  },
+  {
+    "task_type": "inventory_count",
+    "profile": "物资材料盘点，关注库存台账、账实一致、出入库、损耗、呆滞物资"
+  },
+  {
+    "task_type": "rd_decision_eval",
+    "profile": "科研决策评估，关注立项决策、论证、会议纪要、审批流程、绩效产出"
+  }
+]

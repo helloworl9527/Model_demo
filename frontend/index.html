@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>审计任务 Demo 控制台</title>
+  <style>
+    :root {
+      --bg-1: #f7f9fc;
+      --bg-2: #eef3ff;
+      --card: #ffffff;
+      --ink: #102039;
+      --ink-2: #44516b;
+      --line: #d9e2f1;
+      --brand: #0d6efd;
+      --brand-2: #1a8cff;
+      --ok: #1f9d55;
+      --warn: #e6a23c;
+      --err: #e53935;
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "PingFang SC", "SF Pro Text", "Noto Sans SC", sans-serif;
+      background:
+        radial-gradient(1200px 500px at 15% -10%, #dbe7ff 0%, transparent 60%),
+        radial-gradient(1000px 400px at 100% 0%, #d9f2ff 0%, transparent 55%),
+        linear-gradient(180deg, var(--bg-2), var(--bg-1));
+      min-height: 100vh;
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 26px auto;
+      padding: 0 16px 24px;
+    }
+
+    .hero {
+      background: linear-gradient(130deg, #0b3d91, #0f5bcf 45%, #1c87ff);
+      color: #fff;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 14px 36px rgba(15, 60, 125, 0.22);
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 26px;
+      letter-spacing: 0.3px;
+    }
+
+    .hero p {
+      margin: 8px 0 0;
+      opacity: 0.95;
+      font-size: 14px;
+    }
+
+    .grid {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 5px 18px rgba(13, 43, 89, 0.06);
+    }
+
+    .panel {
+      padding: 14px;
+    }
+
+    .panel h2 {
+      margin: 0 0 10px;
+      font-size: 16px;
+    }
+
+    label {
+      display: block;
+      margin: 8px 0 6px;
+      font-size: 13px;
+      color: var(--ink-2);
+    }
+
+    input[type="text"], textarea, input[type="file"] {
+      width: 100%;
+      border: 1px solid #cfd8ea;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btns {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #fff;
+      background: linear-gradient(120deg, var(--brand), var(--brand-2));
+      transition: transform .12s ease, filter .12s ease;
+    }
+
+    button.secondary {
+      background: #6b778c;
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+    }
+
+    .progress {
+      height: 12px;
+      border-radius: 999px;
+      background: #ebf0fa;
+      overflow: hidden;
+      margin-top: 12px;
+      border: 1px solid #d9e2f1;
+    }
+
+    .bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #2f8bff, #14b8a6);
+      transition: width 260ms ease;
+    }
+
+    .status {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--ink-2);
+    }
+
+    .feed {
+      max-height: 560px;
+      overflow: auto;
+      padding: 8px 10px 14px;
+    }
+
+    .step {
+      margin: 10px 0;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fbfdff;
+      overflow: hidden;
+      animation: fadeIn .24s ease;
+    }
+
+    .step h3 {
+      margin: 0;
+      padding: 10px 12px;
+      font-size: 13px;
+      background: #f2f7ff;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .badge {
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      color: #fff;
+      background: #7d8ea8;
+    }
+
+    .ok { background: var(--ok); }
+    .warn { background: var(--warn); }
+    .err { background: var(--err); }
+
+    pre {
+      margin: 0;
+      padding: 10px 12px;
+      font-size: 12px;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #18283f;
+      background: #fff;
+    }
+
+    .meta {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #4b5f7d;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(2px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 960px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>审计智能体流程可视化 Demo</h1>
+      <p>上传文本或文档后，自动执行：语义解析 → 任务分解 → 并行执行 → 交叉验证与证据链。</p>
+    </div>
+
+    <div class="grid">
+      <div class="card panel">
+        <h2>输入与执行</h2>
+
+        <label for="inputType">输入类型</label>
+        <div class="row">
+          <label><input type="radio" name="inputType" value="file" checked /> 文件上传</label>
+          <label><input type="radio" name="inputType" value="text" /> 文本输入</label>
+        </div>
+
+        <div id="fileBlock">
+          <label for="fileInput">上传文件（pdf/docx）</label>
+          <input id="fileInput" type="file" accept=".pdf,.docx" />
+        </div>
+
+        <div id="textBlock" style="display:none">
+          <label for="textInput">审计方案文本</label>
+          <textarea id="textInput" placeholder="粘贴审计方案内容..."></textarea>
+        </div>
+
+        <label for="pollInterval">轮询间隔（毫秒）</label>
+        <input id="pollInterval" type="text" value="1200" />
+
+        <div class="btns">
+          <button id="runBtn">一键执行全流程</button>
+          <button class="secondary" id="clearBtn">清空输出</button>
+        </div>
+
+        <div class="progress"><div id="progressBar" class="bar"></div></div>
+        <div id="statusText" class="status">等待执行</div>
+        <div id="metaText" class="meta"></div>
+      </div>
+
+      <div class="card">
+        <div class="panel" style="padding-bottom:0">
+          <h2>步骤输出与进度反馈</h2>
+        </div>
+        <div id="feed" class="feed"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const runBtn = document.getElementById('runBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const feed = document.getElementById('feed');
+    const progressBar = document.getElementById('progressBar');
+    const statusText = document.getElementById('statusText');
+    const metaText = document.getElementById('metaText');
+    const fileBlock = document.getElementById('fileBlock');
+    const textBlock = document.getElementById('textBlock');
+
+    let currentRecordId = null;
+
+    function setProgress(v, msg) {
+      progressBar.style.width = `${Math.max(0, Math.min(100, v))}%`;
+      if (msg) statusText.textContent = msg;
+    }
+
+    function addStep(title, data, state = 'ok') {
+      const box = document.createElement('section');
+      box.className = 'step';
+      const stateCls = state === 'ok' ? 'ok' : state === 'warn' ? 'warn' : state === 'err' ? 'err' : '';
+      box.innerHTML = `
+        <h3>
+          <span>${title}</span>
+          <span class="badge ${stateCls}">${state.toUpperCase()}</span>
+        </h3>
+        <pre>${escapeHtml(typeof data === 'string' ? data : JSON.stringify(data, null, 2))}</pre>
+      `;
+      feed.prepend(box);
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;');
+    }
+
+    async function postJson(url, payload) {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.detail || `${url} failed`);
+      return data;
+    }
+
+    async function runParse() {
+      const inputType = document.querySelector('input[name="inputType"]:checked').value;
+      if (inputType === 'file') {
+        const file = document.getElementById('fileInput').files[0];
+        if (!file) throw new Error('请先选择 pdf/docx 文件');
+
+        const form = new FormData();
+        form.append('file', file);
+
+        const res = await fetch('/parse-file', { method: 'POST', body: form });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.detail || '/parse-file failed');
+        return data;
+      }
+
+      const text = document.getElementById('textInput').value.trim();
+      if (!text) throw new Error('请先输入审计方案文本');
+      return postJson('/parse', { text });
+    }
+
+    async function runPipeline() {
+      runBtn.disabled = true;
+      setProgress(4, '开始执行');
+      metaText.textContent = '';
+
+      try {
+        setProgress(12, '步骤 1/4：语义解析中...');
+        const parseResp = await runParse();
+        currentRecordId = parseResp.record_id;
+        const parsed = parseResp.data || parseResp;
+        addStep('步骤1 语义解析输出', parseResp, 'ok');
+
+        metaText.textContent = `record_id: ${currentRecordId}`;
+
+        setProgress(36, '步骤 2/4：任务分解与路由中...');
+        const decomposeResp = await fetch(`/decompose?record_id=${encodeURIComponent(currentRecordId)}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(parsed)
+        }).then(async r => {
+          const j = await r.json().catch(() => ({}));
+          if (!r.ok) throw new Error(j.detail || '/decompose failed');
+          return j;
+        });
+        addStep('步骤2 任务分解输出', decomposeResp, 'ok');
+
+        setProgress(55, '步骤 3/4：并行执行提交中...');
+        const executeReq = {
+          record_id: currentRecordId,
+          tasks: decomposeResp.tasks || [],
+          parsed_context: parsed
+        };
+        const executeResp = await postJson('/execute', executeReq);
+        addStep('步骤3 执行提交输出', executeResp, 'ok');
+
+        const jobs = executeResp.jobs || [];
+        const pollMs = Number(document.getElementById('pollInterval').value) || 1200;
+        let doneCount = 0;
+        let round = 0;
+
+        while (doneCount < jobs.length && jobs.length > 0 && round < 60) {
+          round += 1;
+          doneCount = 0;
+
+          for (const job of jobs) {
+            const status = await fetch(`/executions/${job.execution_id}`).then(r => r.json());
+            const eventsResp = await fetch(`/executions/${job.execution_id}/events?count=10`).then(r => r.json());
+            const events = eventsResp.events || [];
+
+            const st = (status.status || '').toLowerCase();
+            if (st === 'done' || st === 'error') doneCount += 1;
+
+            addStep(
+              `步骤3 运行反馈 [${job.task_type}] #${round}`,
+              { status, events },
+              st === 'error' ? 'err' : st === 'done' ? 'ok' : 'warn'
+            );
+          }
+
+          const p = 55 + Math.floor((doneCount / Math.max(1, jobs.length)) * 25);
+          setProgress(p, `步骤 3/4：并行执行中... ${doneCount}/${jobs.length}`);
+          if (doneCount < jobs.length) {
+            await new Promise(r => setTimeout(r, pollMs));
+          }
+        }
+
+        setProgress(84, '步骤 4/4：交叉验证与证据链生成中...');
+        const crossValidateResp = await postJson('/cross-validate', {
+          record_id: currentRecordId,
+          execution_ids: jobs.map(x => x.execution_id)
+        });
+        addStep('步骤4 交叉验证输出', crossValidateResp, 'ok');
+
+        setProgress(100, '完成');
+      } catch (err) {
+        addStep('流程异常', String(err), 'err');
+        setProgress(100, '执行失败');
+      } finally {
+        runBtn.disabled = false;
+      }
+    }
+
+    document.querySelectorAll('input[name="inputType"]').forEach(el => {
+      el.addEventListener('change', () => {
+        const isFile = document.querySelector('input[name="inputType"]:checked').value === 'file';
+        fileBlock.style.display = isFile ? '' : 'none';
+        textBlock.style.display = isFile ? 'none' : '';
+      });
+    });
+
+    runBtn.addEventListener('click', runPipeline);
+    clearBtn.addEventListener('click', () => {
+      feed.innerHTML = '';
+      setProgress(0, '等待执行');
+      metaText.textContent = '';
+    });
+  </script>
+</body>
+</html>
