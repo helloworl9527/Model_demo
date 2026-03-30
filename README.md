@@ -1,4 +1,4 @@
-# teacher_task_model
+# 审计模型
 
 审计任务自动化 Demo：语义解析 -> 任务分解与路由 -> 并行执行 -> 交叉验证与证据链。
 
@@ -127,7 +127,4 @@ PYTHONPATH=$(pwd)
 ### Q3: 为什么很多结果是“通过”
 当前 `rule_engine.py` 主要做流程一致性检查（done/coverage/confidence），不是深度业务审计打分。
 
-## 8. 上 GitHub 前必须做的安全检查
-- 不要提交 `.env`（`.gitignore` 已忽略）
-- 若 API Key 曾进入 git 历史，请立即在平台侧轮换新 key
-- 检查 `data/records/` 是否包含敏感业务文档，默认不提交
+
