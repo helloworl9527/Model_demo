@@ -53,12 +53,7 @@ teacher_task_model/
 ```
 
 ## 3. 部署指南（服务器/本地通用）
-### 3.0 一键部署（推荐）
-```bash
-cd teacher_task_model
-chmod +x scripts/deploy.sh
-./scripts/deploy.sh
-```
+
 
 脚本会自动完成：Redis 检查/安装、Python 虚拟环境创建、依赖安装、API 与 Worker 启动。
 
